@@ -1,0 +1,119 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-c",
+      "-Iinclude",
+      "-o",
+      "obj/swf.o",
+      "src/swf.c"
+    ],
+    "directory": "/home/finxx/dev/libswf",
+    "file": "/home/finxx/dev/libswf/src/swf.c",
+    "output": "/home/finxx/dev/libswf/obj/swf.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-c",
+      "-Iinclude",
+      "-o",
+      "obj/rect.o",
+      "src/rect.c"
+    ],
+    "directory": "/home/finxx/dev/libswf",
+    "file": "/home/finxx/dev/libswf/src/rect.c",
+    "output": "/home/finxx/dev/libswf/obj/rect.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-c",
+      "-Iinclude",
+      "-o",
+      "obj/compression.c",
+      "src/compression.c"
+    ],
+    "directory": "/home/finxx/dev/libswf",
+    "file": "/home/finxx/dev/libswf/src/compression.c",
+    "output": "/home/finxx/dev/libswf/obj/compression.c"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-c",
+      "-Iinclude",
+      "-o",
+      "bin/test1",
+      "test/test1.c"
+    ],
+    "directory": "/home/finxx/dev/libswf",
+    "file": "/home/finxx/dev/libswf/test/test1.c",
+    "output": "/home/finxx/dev/libswf/bin/test1"
+  },
+  {
+    "arguments": [
+      "/usr/bin/clang-16",
+      "-cc1",
+      "-triple",
+      "x86_64-pc-linux-gnu",
+      "-emit-obj",
+      "-mrelax-all",
+      "-disable-free",
+      "-clear-ast-before-backend",
+      "-disable-llvm-verifier",
+      "-discard-value-names",
+      "-main-file-name",
+      "-mrelocation-model",
+      "pic",
+      "-pic-level",
+      "2",
+      "-pic-is-pie",
+      "-mframe-pointer=all",
+      "-fmath-errno",
+      "-ffp-contract=on",
+      "-fno-rounding-math",
+      "-mconstructor-aliases",
+      "-funwind-tables=2",
+      "-target-cpu",
+      "x86-64",
+      "-tune-cpu",
+      "generic",
+      "-mllvm",
+      "-treat-scalable-fixed-error-as-warning",
+      "-debugger-tuning=gdb",
+      "-fcoverage-compilation-dir=/home/finxx/dev/libswf",
+      "-resource-dir",
+      "/usr/lib/clang/16",
+      "-I",
+      "include",
+      "-internal-isystem",
+      "/usr/lib/clang/16/include",
+      "-internal-isystem",
+      "/usr/local/include",
+      "-internal-isystem",
+      "/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/13.2.1/../../../../x86_64-pc-linux-gnu/include",
+      "-internal-externc-isystem",
+      "/include",
+      "-internal-externc-isystem",
+      "/usr/include",
+      "-fdebug-compilation-dir=/home/finxx/dev/libswf",
+      "-ferror-limit",
+      "19",
+      "-stack-protector",
+      "2",
+      "-fgnuc-version=4.2.1",
+      "-fcolor-diagnostics",
+      "-faddrsig",
+      "-D__GCC_HAVE_DWARF2_CFI_ASM=1",
+      "-x",
+      "c",
+      "-o",
+      "/tmp/test1-bab831.o",
+      "test/test1.c"
+    ],
+    "directory": "/home/finxx/dev/libswf",
+    "file": "/home/finxx/dev/libswf/test/test1.c",
+    "output": "/tmp/test1-bab831.o"
+  }
+]
