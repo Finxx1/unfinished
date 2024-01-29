@@ -84,7 +84,14 @@ void set_colors(const char* def, const char* _comment, const char* _bold) {
 }
 
 // Draw a line of text in the given color
-void draw_line(char* txt, int color, int x, int y) {
+void draw_line(char* txt, int len, int color, int x, int y) {
+	// If this seems really complicated, that is because
+	// I made it replicate the way ST draws. Exactly.
+	// Seriously, bring up a side-by-side if you don't
+	// believe me. God, this is such a waste of time...
+	
+	if (txt[len - 1] == '\n') len--;
+
 	XftColor* c = &regular;
 	switch (color) {
 		case 1:
@@ -95,7 +102,7 @@ void draw_line(char* txt, int color, int x, int y) {
 			break;
 	}
 
-	XftDrawStringUtf8(xftdraw, c, font, thickness + x * get_font_width(), thickness + (y + 1) * font->ascent, txt, strlen(txt));
+	XftDrawStringUtf8(xftdraw, c, font, thickness + x * get_font_width(), thickness + (y + 1) * get_font_height() - (get_font_height() - font->ascent), (const unsigned char*)txt, len);
 }
 
 // Draw a cursor at the position
@@ -137,7 +144,7 @@ void create_window(int width, int height) {
 	winattr.bit_gravity = StaticGravity;
 	winattr.background_pixel = bgcolor; 
 	winattr.colormap = cmap;
-	winattr.event_mask = StructureNotifyMask | KeyPressMask;
+	winattr.event_mask = StructureNotifyMask | KeyPressMask | ExposureMask;
 	unsigned long winattrmask = CWBitGravity | CWBackPixel | CWColormap | CWBorderPixel | CWEventMask;
 
 	w = XCreateWindow(d, root, 0, 0, width, height, 0, visinfo.depth, InputOutput, visinfo.visual, winattrmask, &winattr);
@@ -154,8 +161,6 @@ void create_window(int width, int height) {
 }
 
 void loop_window(void) {
-	draw(); // For some reason, Expose isn't sent...
-
 	int open = 1;
 	XEvent e = {};
 	while (open) {

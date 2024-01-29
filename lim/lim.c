@@ -11,6 +11,7 @@ int cx = 0, cy = 0; // cursor position in cells
 typedef struct {
 	char* raw;
 	int size;
+	int capacity;
 } editor_row;
 
 typedef struct {
@@ -18,9 +19,29 @@ typedef struct {
 	int rowcount;
 } editor_file;
 
+editor_file file;
+
 void draw() {
 	clear_window();
-	draw_line("                        f->badweight = 1;", 1, 0, 0);
+
+	for(int i = 0; i < file.rowcount; i++) {
+		// check for comments
+		int commentindex = -1;
+		for (int j = 0; j < file.rows[i].size - 1; j++) {
+			if (file.rows[i].raw[j] == '/' && file.rows[i].raw[j + 1] == '/') {
+				commentindex = j;
+				break;
+			}
+		}
+
+		if (commentindex == -1) {
+			draw_line(file.rows[i].raw, file.rows[i].size, 0, 0, i);
+		} else {
+			draw_line(file.rows[i].raw, commentindex, 0, 0, i);
+			draw_line(file.rows[i].raw + commentindex, file.rows[i].size - commentindex, 2, commentindex, i);
+		}
+	}
+
 	draw_cursor(cx, cy);
 }
 
@@ -46,7 +67,33 @@ void kb(int code) {
 	draw();
 }
 
-int main() {
+void read_file(char* file_name) {
+	FILE* fp = fopen(file_name, "rb");
+	if (!fp) die("can't open file\n");
+
+	// first pass to see how many lines there are
+	int c;
+	int lines = 0;
+	while ((c = fgetc(fp)) != EOF)
+		if (c == '\n') lines++;
+
+	file.rowcount = lines;
+	file.rows = calloc(lines, sizeof(editor_row));
+	if (!file.rows) die("can't alloc memory");
+
+	// actually read bytes this time
+	fseek(fp, 0, SEEK_SET);
+
+	for (int i = 0; i < lines; i++) {
+		file.rows[i].size = getline(&file.rows[i].raw, &file.rows[i].capacity, fp);
+	}
+
+	fclose(fp);
+}
+
+int main(int argc, char* argv[]) {
+	if (argc > 1) read_file(argv[1]);
+
 	set_bg(0xB3000000); // Note: ARGB, premultiplied!
 	create_window(800, 600);
 	

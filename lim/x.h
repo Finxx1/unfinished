@@ -28,7 +28,7 @@ void set_font(const char* name);
 void set_colors(const char* def, const char* comment, const char* bold);
 
 // Draw a line of text in the given color
-void draw_line(char* txt, int color, int x, int y);
+void draw_line(char* txt, int len, int color, int x, int y);
 
 // Draw a cursor at the position
 void draw_cursor(int x, int y);
