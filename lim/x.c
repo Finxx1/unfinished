@@ -144,7 +144,7 @@ void create_window(int width, int height) {
 	winattr.bit_gravity = StaticGravity;
 	winattr.background_pixel = bgcolor; 
 	winattr.colormap = cmap;
-	winattr.event_mask = StructureNotifyMask | KeyPressMask | ExposureMask;
+	winattr.event_mask = StructureNotifyMask | KeyPressMask | ExposureMask | ButtonPressMask;
 	unsigned long winattrmask = CWBitGravity | CWBackPixel | CWColormap | CWBorderPixel | CWEventMask;
 
 	w = XCreateWindow(d, root, 0, 0, width, height, 0, visinfo.depth, InputOutput, visinfo.visual, winattrmask, &winattr);
@@ -186,6 +186,18 @@ void loop_window(void) {
 					kb(k);
 				else
 					kb(tmp[0]);
+			}
+		}
+		if (e.type == ButtonPress) {
+			if (kb) {
+				switch (e.xbutton.button) {
+					case Button5:
+						kb(XWrapMWheelUp);
+						break;
+					case Button4:
+						kb(XWrapMWheelDown);
+						break;
+				}
 			}
 		}
 	}

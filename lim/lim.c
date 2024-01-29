@@ -1,12 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "x.h"
+#include "util.h"
 
 #define die(...) { fprintf(stderr, __VA_ARGS__); exit(1); } do {} while(0)
 
 int w, h; // width and height in cells
 int cx = 0, cy = 0; // cursor position in cells
+int scroll = 0, hscroll = 0;
 
 typedef struct {
 	char* raw;
@@ -35,10 +38,10 @@ void draw() {
 		}
 
 		if (commentindex == -1) {
-			draw_line(file.rows[i].raw, file.rows[i].size, 0, 0, i);
+			draw_line(file.rows[i].raw, file.rows[i].size, 0, 0, i + scroll);
 		} else {
-			draw_line(file.rows[i].raw, commentindex, 0, 0, i);
-			draw_line(file.rows[i].raw + commentindex, file.rows[i].size - commentindex, 2, commentindex, i);
+			draw_line(file.rows[i].raw, commentindex, 0, hscroll, i + scroll);
+			draw_line(file.rows[i].raw + commentindex, file.rows[i].size - commentindex, 2, hscroll + commentindex, i + scroll);
 		}
 	}
 
@@ -62,6 +65,12 @@ void kb(int code) {
 			break;
 		case XWrapKUP:
 			cy--;
+			break;
+		case XWrapMWheelUp:
+			scroll--;
+			break;
+		case XWrapMWheelDown:
+			scroll++;
 			break;
 	}
 	draw();
@@ -89,6 +98,13 @@ void read_file(char* file_name) {
 	}
 
 	fclose(fp);
+
+	// go through and replace tabs with spaces
+	for (int i = 0; i < lines; i++) {
+		file.rows[i].raw = str_replace(file.rows[i].raw, "\t", "    ");
+		file.rows[i].size = strlen(file.rows[i].raw);
+		file.rows[i].capacity = strlen(file.rows[i].raw);
+	}
 }
 
 int main(int argc, char* argv[]) {
