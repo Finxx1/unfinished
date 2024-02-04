@@ -14,7 +14,7 @@ int scroll = 0, hscroll = 0;
 typedef struct {
 	char* raw;
 	int size;
-	int capacity;
+	size_t capacity;
 } editor_row;
 
 typedef struct {
@@ -57,15 +57,19 @@ void kb(int code) {
 
 	switch (code) {
 		case XWrapKLEFT:
+			if (cx == 0) break;
 			cx--;
 			break;
 		case XWrapKRIGHT:
+			if (cx == file.rows[cy].size) break;
 			cx++;
 			break;
 		case XWrapKDOWN:
+			if (cy + 1 == file.rowcount) break;
 			cy++;
 			break;
 		case XWrapKUP:
+			if (cy == 0) break;
 			cy--;
 			break;
 		case XWrapMWheelUp:
@@ -74,9 +78,17 @@ void kb(int code) {
 		case XWrapMWheelDown:
 			scroll++;
 			break;
+		case XWrapKBackspace:
+			if (cx == 0) break;
+			
+			cx--;
+
+			del_char(file.rows[cy].raw, file.rows[cy].capacity, cx);
+			file.rows[cy].size--;
+			
+			break;
 		default:
 			if (code > 255) break;
-			printf("%d\n", file.rows[cy].capacity);
 			file.rows[cy].size++;
 			file.rows[cy].capacity++;
 			file.rows[cy].raw = realloc(file.rows[cy].raw, file.rows[cy].capacity);

@@ -5,8 +5,8 @@
 #define XWrapKRIGHT 0xFF53
 #define XWrapKDOWN 0xFF54
 #define XWrapKUP 0xFF52
-#define XWrapKBackspace 0x8
-#define XWrapKNewline
+#define XWrapKBackspace 0xFF08
+#define XWrapKNewline 0xFF0D
 #define XWrapMWheelUp 0xFF56
 #define XWrapMWheelDown 0xFF55
 

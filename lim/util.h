@@ -53,3 +53,9 @@ void insert_char(char* str, int len, int x, char c) {
 	str[x] = c;
 }
 
+void del_char(char* str, int len, int x) {
+	for (int i = x; i < len - 1; i++) {
+		str[i] = str[i+1];
+	}
+}
+
