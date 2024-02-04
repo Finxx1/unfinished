@@ -5,8 +5,10 @@
 #define XWrapKRIGHT 0xFF53
 #define XWrapKDOWN 0xFF54
 #define XWrapKUP 0xFF52
-#define XWrapMWheelUp 0xFF55
-#define XWrapMWheelDown 0xFF56
+#define XWrapKBackspace 0x8
+#define XWrapKNewline
+#define XWrapMWheelUp 0xFF56
+#define XWrapMWheelDown 0xFF55
 
 // Set distance between border and text
 void set_border(int thickness);

@@ -44,3 +44,12 @@ char *str_replace(char *orig, char *rep, char *with) {
     strcpy(tmp, orig);
     return result;
 }
+
+void insert_char(char* str, int len, int x, char c) {
+	for (int i = len - 1; i > x; i++) {
+		str[i] = str[i-1];
+	}
+
+	str[x] = c;
+}
+

@@ -90,6 +90,8 @@ void draw_line(char* txt, int len, int color, int x, int y) {
 	// Seriously, bring up a side-by-side if you don't
 	// believe me. God, this is such a waste of time...
 	
+	if (!len) return;
+
 	if (txt[len - 1] == '\n') len--;
 
 	XftColor* c = &regular;
@@ -182,19 +184,16 @@ void loop_window(void) {
 				KeySym k;
 				XLookupString(&e.xkey, tmp, 32, &k, NULL);
 				
-				if (tmp[0] == 0)
-					kb(k);
-				else
-					kb(tmp[0]);
+				kb(k);
 			}
 		}
 		if (e.type == ButtonPress) {
 			if (kb) {
 				switch (e.xbutton.button) {
-					case Button5:
+					case Button4:
 						kb(XWrapMWheelUp);
 						break;
-					case Button4:
+					case Button5:
 						kb(XWrapMWheelDown);
 						break;
 				}

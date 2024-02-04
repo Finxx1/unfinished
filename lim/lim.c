@@ -45,7 +45,7 @@ void draw() {
 		}
 	}
 
-	draw_cursor(cx, cy);
+	draw_cursor(cx + hscroll, cy + scroll);
 }
 
 void resize(int w, int h) {
@@ -53,6 +53,8 @@ void resize(int w, int h) {
 }
 
 void kb(int code) {
+	printf("0x%x\n", code);
+
 	switch (code) {
 		case XWrapKLEFT:
 			cx--;
@@ -72,8 +74,24 @@ void kb(int code) {
 		case XWrapMWheelDown:
 			scroll++;
 			break;
+		default:
+			if (code > 255) break;
+			printf("%d\n", file.rows[cy].capacity);
+			file.rows[cy].size++;
+			file.rows[cy].capacity++;
+			file.rows[cy].raw = realloc(file.rows[cy].raw, file.rows[cy].capacity);
+
+			insert_char(file.rows[cy].raw, file.rows[cy].capacity, cx, code);
+			cx++;
+			break;
 	}
+
 	draw();
+}
+
+void new_file() {
+	file.rowcount = 1;
+	file.rows = calloc(1, sizeof(editor_row));
 }
 
 void read_file(char* file_name) {
@@ -109,6 +127,7 @@ void read_file(char* file_name) {
 
 int main(int argc, char* argv[]) {
 	if (argc > 1) read_file(argv[1]);
+	else new_file();
 
 	set_bg(0xB3000000); // Note: ARGB, premultiplied!
 	create_window(800, 600);
