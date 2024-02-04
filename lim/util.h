@@ -46,7 +46,7 @@ char *str_replace(char *orig, char *rep, char *with) {
 }
 
 void insert_char(char* str, int len, int x, char c) {
-	for (int i = len - 1; i > x; i++) {
+	for (int i = len - 1; i > x; i--) {
 		str[i] = str[i-1];
 	}
 
