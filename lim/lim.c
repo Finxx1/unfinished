@@ -78,6 +78,24 @@ void kb(int code) {
 		case XWrapMWheelDown:
 			scroll++;
 			break;
+		case XWrapKNewline:
+			file.rowcount++;
+			file.rows = realloc(file.rows, file.rowcount * sizeof(editor_row));
+
+			cy++;
+
+			memmove(&file.rows[cy], &file.rows[cy - 1], (file.rowcount - cy) * sizeof(editor_row));
+
+			file.rows[cy].size = file.rows[cy - 1].size - cx;
+			file.rows[cy].capacity = file.rows[cy - 1].size - cx;
+			file.rows[cy].raw = calloc(file.rows[cy - 1].size - cx, 1);
+
+			memcpy(file.rows[cy].raw, file.rows[cy - 1].raw + cx, file.rows[cy - 1].size - cx);
+			file.rows[cy - 1].size = cx;
+
+			cx = 0;
+
+			break;
 		case XWrapKBackspace:
 			if (cx == 0) break;
 			
@@ -134,6 +152,14 @@ void read_file(char* file_name) {
 		file.rows[i].raw = str_replace(file.rows[i].raw, "\t", "    ");
 		file.rows[i].size = strlen(file.rows[i].raw);
 		file.rows[i].capacity = strlen(file.rows[i].raw);
+	}
+	// go through and remove trailing newlines
+	for (int i = 0; i < lines; i++) {
+		if (file.rows[i].raw[file.rows[i].size - 1] == '\n') {
+			file.rows[i].size--;
+			file.rows[i].capacity--;
+			file.rows[i].raw = realloc(file.rows[i].raw, file.rows[i].capacity);
+		}
 	}
 }
 

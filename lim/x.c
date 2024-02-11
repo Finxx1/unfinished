@@ -89,7 +89,8 @@ void draw_line(char* txt, int len, int color, int x, int y) {
 	// I made it replicate the way ST draws. Exactly.
 	// Seriously, bring up a side-by-side if you don't
 	// believe me. God, this is such a waste of time...
-	
+
+	if (!txt) return;
 	if (!len) return;
 
 	if (txt[len - 1] == '\n') len--;
@@ -190,10 +191,10 @@ void loop_window(void) {
 		if (e.type == ButtonPress) {
 			if (kb) {
 				switch (e.xbutton.button) {
-					case Button4:
+					case Button5:
 						kb(XWrapMWheelUp);
 						break;
-					case Button5:
+					case Button4:
 						kb(XWrapMWheelDown);
 						break;
 				}
