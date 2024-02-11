@@ -143,10 +143,13 @@ void new_file() {
 }
 
 void read_file(char* file_name) {
-	FILE* fp = fopen(file_name, "rb");
-	if (!fp) die("can't open file\n");
-
 	file.filename = file_name;
+
+	FILE* fp = fopen(file_name, "rb");
+	if (!fp) {
+		new_file();
+		return;
+	}
 
 	// first pass to see how many lines there are
 	int c;
@@ -185,7 +188,7 @@ void read_file(char* file_name) {
 
 int main(int argc, char* argv[]) {
 	if (argc > 1) read_file(argv[1]);
-	else new_file();
+	else die("no file\n");
 
 	set_bg(0xB3000000); // Note: ARGB, premultiplied!
 	create_window(800, 600);
