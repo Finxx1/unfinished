@@ -30,6 +30,11 @@ static Visual* vis;
 static Window w;
 static GC gc;
 
+static int control = 0;
+int get_control() {
+	return control;
+}
+
 static int thickness;
 
 // Set distance between border and text
@@ -147,7 +152,7 @@ void create_window(int width, int height) {
 	winattr.bit_gravity = StaticGravity;
 	winattr.background_pixel = bgcolor; 
 	winattr.colormap = cmap;
-	winattr.event_mask = StructureNotifyMask | KeyPressMask | ExposureMask | ButtonPressMask;
+	winattr.event_mask = StructureNotifyMask | KeyPressMask | KeyReleaseMask | ExposureMask | ButtonPressMask;
 	unsigned long winattrmask = CWBitGravity | CWBackPixel | CWColormap | CWBorderPixel | CWEventMask;
 
 	w = XCreateWindow(d, root, 0, 0, width, height, 0, visinfo.depth, InputOutput, visinfo.visual, winattrmask, &winattr);
@@ -179,13 +184,17 @@ void loop_window(void) {
 			if (draw)
 				draw();
 		}
+		if (e.type == KeyRelease) {
+			control = 0;
+		}
 		if (e.type == KeyPress) {
 			if (kb) {
 				char tmp[32]; // 32 seems like a good bet
 				KeySym k;
 				XLookupString(&e.xkey, tmp, 32, &k, NULL);
-				
-				kb(k);
+
+				if (k == XK_Control_L) control = 1;
+				else kb(k);
 			}
 		}
 		if (e.type == ButtonPress) {

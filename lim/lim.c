@@ -20,9 +20,22 @@ typedef struct {
 typedef struct {
 	editor_row* rows;
 	int rowcount;
+
+	char* filename;
 } editor_file;
 
 editor_file file;
+
+void save_file() {
+	FILE* fp = fopen(file.filename, "w");
+
+	for (int i = 0; i < file.rowcount; i++) {
+		fwrite(file.rows[i].raw, 1, file.rows[i].size, fp);
+		fputc('\n', fp);
+	}
+
+	fclose(fp);
+}
 
 void draw() {
 	clear_window();
@@ -105,6 +118,11 @@ void kb(int code) {
 			file.rows[cy].size--;
 			
 			break;
+		case 's':
+			if (get_control()) {
+				save_file();
+				break;
+			}
 		default:
 			if (code > 255) break;
 			file.rows[cy].size++;
@@ -127,6 +145,8 @@ void new_file() {
 void read_file(char* file_name) {
 	FILE* fp = fopen(file_name, "rb");
 	if (!fp) die("can't open file\n");
+
+	file.filename = file_name;
 
 	// first pass to see how many lines there are
 	int c;

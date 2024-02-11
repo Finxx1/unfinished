@@ -10,6 +10,9 @@
 #define XWrapMWheelUp 0xFF56
 #define XWrapMWheelDown 0xFF55
 
+// Gets if the control key is down
+int get_control();
+
 // Set distance between border and text
 void set_border(int thickness);
 
