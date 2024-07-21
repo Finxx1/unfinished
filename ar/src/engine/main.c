@@ -16,6 +16,7 @@ extern void start(void);
 extern void update(void);
 
 static GLFWwindow* window;
+static void (*mousecallback)(int, int) = NULL;
 
 int EngGetWidth(void) {
 	int width;
@@ -48,6 +49,16 @@ void EngGetMouseXY(int* x, int* y) {
 	*x = floor(mx);
 }
 
+void EngSetMouseCallback(void (*func)(int, int)) {
+	mousecallback = func;
+}
+
+void glfwmousecallback(GLFWwindow* window, int button, int action, int mods) {
+	if (mousecallback) mousecallback(button, action);
+	(void)(window);
+	(void)(mods);
+}
+
 void onexit(void) {
 	glfwTerminate();
 }
@@ -72,6 +83,8 @@ int main() {
 	glBindVertexArray(vao);
 
 	stbi_set_flip_vertically_on_load(1);
+
+	glfwSetMouseButtonCallback(window, glfwmousecallback);
 
 	start();
 
